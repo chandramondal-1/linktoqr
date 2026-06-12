@@ -1,0 +1,167 @@
+/* Fade and slide up for text/cards */
+.fade-up {
+    opacity: 0;
+    transform: translateY(15px);
+    animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-delay: var(--d, 0ms);
+}
+
+@keyframes fadeUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Modal and Backdrop transition */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes scaleUp {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* Toast slider notification transition */
+@keyframes slideIn {
+    from {
+        transform: translateX(120%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(120%);
+        opacity: 0;
+    }
+}
+
+/* Background floating particle effect */
+@keyframes floaty {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-15px) rotate(3deg);
+    }
+}
+
+.glow-orb {
+    animation: orbPulse 12s ease-in-out infinite alternate;
+}
+
+.orb-2 {
+    animation-delay: -3s;
+}
+
+.orb-3 {
+    animation-delay: -6s;
+}
+
+@keyframes orbPulse {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+    50% {
+        transform: translate(5%, -5%) scale(1.1);
+    }
+    100% {
+        transform: translate(-5%, 5%) scale(0.9);
+    }
+}
+
+/* Loader ring spinner */
+.loader-ring {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border: 3.5px solid rgba(0, 114, 255, 0.15);
+    border-radius: 50%;
+    border-top-color: #0072ff;
+    animation: spinnerRotation 1s linear infinite;
+}
+
+@keyframes spinnerRotation {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Studio Preview & Camera Scanner Scan Laser Sweep line */
+.preview-scan-line,
+.scanner-overlay-laser {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, rgba(0, 198, 255, 0) 10%, #0072ff 50%, rgba(0, 198, 255, 0) 90%);
+    box-shadow: 0 0 12px 2px #0072ff;
+    z-index: 10;
+    pointer-events: none;
+    animation: scannerSweep 2.5s ease-in-out infinite;
+}
+
+.preview-scan-line {
+    top: 0;
+}
+
+.scanner-overlay-laser {
+    top: 0;
+    background: linear-gradient(90deg, rgba(244, 63, 94, 0) 10%, #f43f5e 50%, rgba(244, 63, 94, 0) 90%);
+    box-shadow: 0 0 12px 2px #f43f5e;
+    animation: scannerSweep 2s ease-in-out infinite;
+}
+
+@keyframes scannerSweep {
+    0% {
+        top: 0%;
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.8;
+    }
+    90% {
+        opacity: 0.8;
+    }
+    100% {
+        top: 100%;
+        opacity: 0;
+    }
+}
+
+/* Glow border pulsing for active configurations */
+.glow-pulse-active {
+    box-shadow: 0 0 0 3px rgba(0, 114, 255, 0.35);
+    animation: borderPulse 1.8s infinite alternate;
+}
+
+@keyframes borderPulse {
+    from {
+        box-shadow: 0 0 0 2px rgba(0, 114, 255, 0.2);
+    }
+    to {
+        box-shadow: 0 0 0 5px rgba(0, 114, 255, 0.5), 0 0 15px rgba(0, 114, 255, 0.3);
+    }
+}
+
+/* Drag hover visual highlight */
+.drag-active {
+    border-color: #0072ff !important;
+    background: rgba(0, 114, 255, 0.12) !important;
+    transform: scale(0.99);
+}

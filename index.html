@@ -1,0 +1,895 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chandra — Premium Vector QR Code Generator & Scanner</title>
+    <link rel="icon" type="image/png" href="logo.png" />
+    
+    <!-- Meta tags for SEO -->
+    <meta name="description" content="Chandra is a 100% free, premium QR code generator and scanner. Customize shapes, gradients, frames, logos, and download SVG, PNG, PDF with zero watermark." />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" referrerpolicy="no-referrer" />
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css?v=1.0.1" />
+    <link rel="stylesheet" href="css/animations.css?v=1.0.1" />
+    
+    <!-- GSAP for micro-animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    
+    <!-- QR Code Styling (Core render library) -->
+    <script src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+    
+    <!-- Html5Qrcode (Webcam QR Scanner) -->
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    
+    <!-- JSZip (for Batch Zip export) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    
+    <!-- jsPDF (for PDF generation) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <!-- Chart.js (for Analytics dashboard) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <!-- Parallax background glowing orbs -->
+    <div class="bg-glow-orbs" aria-hidden="true">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        <div class="glow-orb orb-3"></div>
+    </div>
+    
+    <!-- Particles background canvas -->
+    <canvas id="particlesCanvas" class="bg-particles" aria-hidden="true"></canvas>
+
+    <header class="navbar">
+        <div class="brand">
+            <span class="brand__logo" aria-hidden="true" style="padding: 0; overflow: hidden; background: none; box-shadow: none;">
+                <img src="logo.png" alt="Chandra logo" style="width: 100%; height: 100%; object-fit: cover; border-radius: inherit;">
+            </span>
+            <div>
+                <div class="brand__name">Chandra</div>
+                <div class="brand__tag">Studio Suite</div>
+            </div>
+        </div>
+
+        <nav class="nav-tabs" aria-label="Main Navigation">
+            <button class="tab-btn active" data-tab="studio-tab" id="navStudio"><i class="fa-solid fa-square-rss"></i> <span class="tab-text">Studio</span></button>
+            <button class="tab-btn" data-tab="presets-tab" id="navPresets"><i class="fa-solid fa-palette"></i> <span class="tab-text">Presets</span></button>
+            <button class="tab-btn" data-tab="scanner-tab" id="navScanner"><i class="fa-solid fa-qrcode"></i> <span class="tab-text">Scan QR</span></button>
+            <button class="tab-btn" data-tab="batch-tab" id="navBatch"><i class="fa-solid fa-layer-group"></i> <span class="tab-text">Bulk Creator</span></button>
+            <button class="tab-btn" data-tab="analytics-tab" id="navAnalytics"><i class="fa-solid fa-chart-line"></i> <span class="tab-text">Dynamic Tracking</span></button>
+            <button class="tab-btn" data-tab="tools-tab" id="navTools"><i class="fa-solid fa-toolbox"></i> <span class="tab-text">Tools & Settings</span></button>
+            <button class="tab-btn" data-tab="help-tab" id="navHelp"><i class="fa-solid fa-circle-question"></i> <span class="tab-text">Docs</span></button>
+        </nav>
+
+        <div class="nav-actions">
+            <button class="icon-btn" id="soundToggle" title="Toggle Sound Feedback" aria-label="Toggle Sound Feedback">
+                <i class="fa-solid fa-volume-high"></i>
+            </button>
+            <button class="icon-btn" id="keyboardShortcutsBtn" title="Keyboard Shortcuts" aria-label="Show keyboard shortcuts">
+                <i class="fa-solid fa-keyboard"></i>
+            </button>
+            <button class="icon-btn" id="themeToggle" title="Toggle Dark/Light Mode" aria-label="Toggle Dark/Light Mode">
+                <i class="fa-solid fa-moon"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="container">
+        
+        <!-- Tab Content: STUDIO (QR GENERATOR) -->
+        <section id="studio-tab" class="tab-content active-content">
+            <div class="hero">
+                <div class="hero__left">
+                    <p class="kicker fade-up">Creative QR Suite</p>
+                    <h1 class="hero__title fade-up" style="--d: 80ms;">High-Definition Vector QR Builder</h1>
+                    <p class="hero__sub fade-up" style="--d: 140ms;">
+                        Customize shapes, gradients, frames, upload branding logos, and export vector SVG, high-resolution PNG, or printable PDFs with zero watermarks.
+                    </p>
+                </div>
+            </div>
+
+            <div class="editor-grid">
+                <!-- Editor Left Controls Panel -->
+                <aside class="panel glass-panel editor-controls" aria-label="QR Customization Panel">
+                    
+                    <!-- SECTION 1: QR CONTENT TYPE -->
+                    <div class="panel__section">
+                        <h2 class="panel__title"><span class="step-num">1</span> Content Type</h2>
+                        <div class="field">
+                            <label for="qrTypeSelect">Select QR Code Action</label>
+                            <select id="qrTypeSelect">
+                                <option value="url" selected>🌐 URL / Web Link</option>
+                                <option value="text">✍️ Plain Text</option>
+                                <option value="wifi">📶 WiFi Network Connect</option>
+                                <option value="email">📧 Email Sender</option>
+                                <option value="phone">📞 Phone Dialer</option>
+                                <option value="sms">💬 SMS Message</option>
+                                <option value="whatsapp">💬 WhatsApp Message</option>
+                                <option value="vcard">👤 vCard Contact Card</option>
+                                <option value="event">📅 Calendar Event</option>
+                                <option value="social">📱 Social Profile Link</option>
+                                <option value="crypto">🪙 Cryptocurrency Address</option>
+                                <option value="paypal">💳 PayPal Payment</option>
+                                <option value="zoom">📹 Zoom Meeting</option>
+                                <option value="spotify">🎵 Spotify Track/Playlist</option>
+                                <option value="maps">📍 Google Maps Location</option>
+                            </select>
+                        </div>
+                        
+                        <!-- DYNAMIC CONTENT FIELDS PANEL -->
+                        <div id="dynamicFieldsContainer" class="dynamic-fields-area">
+                            <!-- Injected by customization.js -->
+                        </div>
+                    </div>
+
+                    <!-- SECTION 2: SHAPES & STYLES -->
+                    <div class="panel__section collapsible-section">
+                        <div class="section-header">
+                            <h2 class="panel__title"><span class="step-num">2</span> Shapes & Patterns</h2>
+                            <button class="collapse-btn" aria-label="Collapse Section"><i class="fa-solid fa-chevron-up"></i></button>
+                        </div>
+                        <div class="section-body">
+                            <div class="two-col">
+                                <div class="field">
+                                    <label for="dotStyle">Body Dots Pattern</label>
+                                    <select id="dotStyle">
+                                        <option value="square" selected>Square Modules</option>
+                                        <option value="rounded">Rounded Modules</option>
+                                        <option value="dots">Circular Dots</option>
+                                        <option value="classy">Classy Diamond-Curve</option>
+                                        <option value="classy-rounded">Classy Rounded Corners</option>
+                                        <option value="extra-rounded">Liquid Bubbles</option>
+                                    </select>
+                                </div>
+                                <div class="field">
+                                    <label for="cornerStyle">Eye Frame Shape</label>
+                                    <select id="cornerStyle">
+                                        <option value="square" selected>Sharp Square</option>
+                                        <option value="dot">Circular Ring</option>
+                                        <option value="rounded">Rounded Square</option>
+                                        <option value="extra-rounded">Extra Curved</option>
+                                        <option value="outward-curve">Outward Arc</option>
+                                        <option value="inward-curve">Inward Petal</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="two-col">
+                                <div class="field">
+                                    <label for="cornerDotStyle">Eye Ball Shape</label>
+                                    <select id="cornerDotStyle">
+                                        <option value="square" selected>Sharp Square</option>
+                                        <option value="dot">Circular Dot</option>
+                                        <option value="rounded">Rounded Dot</option>
+                                        <option value="extra-rounded">Extra Curved</option>
+                                        <option value="outward-curve">Outward Arc</option>
+                                        <option value="inward-curve">Inward Petal</option>
+                                    </select>
+                                </div>
+                                <div class="field">
+                                    <label for="qrEcc">Error Correction</label>
+                                    <select id="qrEcc">
+                                        <option value="L">L (7% Recovery - Fast)</option>
+                                        <option value="M" selected>M (15% Recovery - Standard)</option>
+                                        <option value="Q">Q (25% Recovery - High)</option>
+                                        <option value="H">H (30% Recovery - Recommended for Logo)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 3: COLORS & GRADIENTS -->
+                    <div class="panel__section collapsible-section">
+                        <div class="section-header">
+                            <h2 class="panel__title"><span class="step-num">3</span> Color Theme</h2>
+                            <button class="collapse-btn" aria-label="Collapse Section"><i class="fa-solid fa-chevron-up"></i></button>
+                        </div>
+                        <div class="section-body">
+                            <!-- FOREGROUND SETTINGS -->
+                            <fieldset class="color-fieldset">
+                                <legend>QR Code Foreground</legend>
+                                <div class="field">
+                                    <label for="foreColorMode">Foreground Type</label>
+                                    <select id="foreColorMode">
+                                        <option value="solid" selected>Solid Color</option>
+                                        <option value="linear">Linear Gradient</option>
+                                        <option value="radial">Radial Gradient</option>
+                                    </select>
+                                </div>
+                                <div class="two-col color-picker-row">
+                                    <div class="field">
+                                        <label for="fgColor1" id="fgColor1Label">Color Primary</label>
+                                        <input type="color" id="fgColor1" value="#05070d" />
+                                    </div>
+                                    <div class="field gradient-only" hidden>
+                                        <label for="fgColor2">Color Secondary</label>
+                                        <input type="color" id="fgColor2" value="#0072ff" />
+                                    </div>
+                                </div>
+                                <div class="field gradient-only linear-only" hidden>
+                                    <label for="fgGradAngle">Gradient Angle</label>
+                                    <input type="range" id="fgGradAngle" min="0" max="360" value="45" />
+                                    <span class="range-value" id="fgGradAngleVal">45°</span>
+                                </div>
+                            </fieldset>
+
+                            <!-- BACKGROUND SETTINGS -->
+                            <fieldset class="color-fieldset">
+                                <legend>Background Style</legend>
+                                <div class="field">
+                                    <label for="bgColorMode">Background Type</label>
+                                    <select id="bgColorMode">
+                                        <option value="solid" selected>Solid Color</option>
+                                        <option value="transparent">Transparent (SVG Only)</option>
+                                        <option value="linear">Linear Gradient</option>
+                                        <option value="radial">Radial Gradient</option>
+                                    </select>
+                                </div>
+                                <div class="two-col color-picker-row bg-colors-row">
+                                    <div class="field">
+                                        <label for="bgColor1" id="bgColor1Label">Bg Color</label>
+                                        <input type="color" id="bgColor1" value="#ffffff" />
+                                    </div>
+                                    <div class="field bg-gradient-only" hidden>
+                                        <label for="bgColor2">Bg Secondary</label>
+                                        <input type="color" id="bgColor2" value="#f8fafc" />
+                                    </div>
+                                </div>
+                                <div class="field bg-gradient-only bg-linear-only" hidden>
+                                    <label for="bgGradAngle">Bg Gradient Angle</label>
+                                    <input type="range" id="bgGradAngle" min="0" max="360" value="135" />
+                                    <span class="range-value" id="bgGradAngleVal">135°</span>
+                                </div>
+                            </fieldset>
+
+                            <!-- CUSTOM EYE COLORS -->
+                            <div class="field toggle-field">
+                                <label for="customEyesToggle" class="toggle-container">
+                                    <input type="checkbox" id="customEyesToggle" />
+                                    <span class="toggle-slider"></span>
+                                    Custom Eye Colors
+                                </label>
+                            </div>
+                            <div id="customEyeColorsContainer" class="custom-eyes-section" hidden>
+                                <div class="two-col">
+                                    <div class="field">
+                                        <label for="eyeFrameColor">Outer Frame Color</label>
+                                        <input type="color" id="eyeFrameColor" value="#05070d" />
+                                    </div>
+                                    <div class="field">
+                                        <label for="eyeBallColor">Inner Ball Color</label>
+                                        <input type="color" id="eyeBallColor" value="#0072ff" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 4: LOGO OVERLAY -->
+                    <div class="panel__section collapsible-section">
+                        <div class="section-header">
+                            <h2 class="panel__title"><span class="step-num">4</span> Logo / Branding</h2>
+                            <button class="collapse-btn" aria-label="Collapse Section"><i class="fa-solid fa-chevron-up"></i></button>
+                        </div>
+                        <div class="section-body">
+                            <div class="drag-drop-zone" id="logoDragZone">
+                                <i class="fa-solid fa-cloud-arrow-up cloud-icon"></i>
+                                <p>Drag & Drop logo or <strong>Browse files</strong></p>
+                                <span class="drag-hint">Supports PNG, JPG, SVG</span>
+                                <input type="file" id="logoUploadInput" accept="image/png,image/jpeg,image/svg+xml" style="display:none;" />
+                            </div>
+
+                            <div class="logo-control-grid" id="logoControlPanel" hidden>
+                                <div class="logo-preview-badge">
+                                    <img id="logoPreviewImg" src="" alt="Selected Logo Preview" />
+                                    <button class="btn small error" id="btnRemoveLogo" title="Remove logo"><i class="fa-solid fa-trash-can"></i> Remove</button>
+                                </div>
+                                <div class="field">
+                                    <label for="logoSizeSlider">Logo Scale Size</label>
+                                    <input type="range" id="logoSizeSlider" min="5" max="35" value="20" />
+                                    <span class="range-value" id="logoSizeVal">20%</span>
+                                    <div class="danger-warning" id="logoECCWarning" hidden>
+                                        <i class="fa-solid fa-circle-exclamation"></i> Large logos require High (H) Error Correction.
+                                    </div>
+                                </div>
+                                <div class="two-col">
+                                    <div class="field">
+                                        <label for="logoMarginSlider">Logo Margin Spacing</label>
+                                        <input type="range" id="logoMarginSlider" min="0" max="25" value="6" />
+                                        <span class="range-value" id="logoMarginVal">6px</span>
+                                    </div>
+                                    <div class="field">
+                                        <label for="logoRadiusSlider">Border Radius</label>
+                                        <input type="range" id="logoRadiusSlider" min="0" max="50" value="8" />
+                                        <span class="range-value" id="logoRadiusVal">8px</span>
+                                    </div>
+                                </div>
+                                <div class="field toggle-field">
+                                    <label for="logoBackgroundEraser" class="toggle-container">
+                                        <input type="checkbox" id="logoBackgroundEraser" checked />
+                                        <span class="toggle-slider"></span>
+                                        Clear QR pattern behind logo
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="preset-logos-area">
+                                <label>Or Select Quick Brand Icon Preset:</label>
+                                <div class="preset-logos-grid">
+                                    <button class="logo-preset-btn" data-brand="chandra" title="Chandra Logo" style="padding: 4px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">
+                                        <img src="logo.png" alt="Chandra" style="width: 20px; height: 20px; border-radius: 50%; object-fit: cover;" />
+                                    </button>
+                                    <button class="logo-preset-btn" data-brand="facebook" title="Facebook"><i class="fa-brands fa-facebook-f"></i></button>
+                                    <button class="logo-preset-btn" data-brand="x-twitter" title="X (formerly Twitter)"><i class="fa-brands fa-x-twitter"></i></button>
+                                    <button class="logo-preset-btn" data-brand="instagram" title="Instagram"><i class="fa-brands fa-instagram"></i></button>
+                                    <button class="logo-preset-btn" data-brand="whatsapp" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></button>
+                                    <button class="logo-preset-btn" data-brand="youtube" title="YouTube"><i class="fa-brands fa-youtube"></i></button>
+                                    <button class="logo-preset-btn" data-brand="spotify" title="Spotify"><i class="fa-brands fa-spotify"></i></button>
+                                    <button class="logo-preset-btn" data-brand="linkedin" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></button>
+                                    <button class="logo-preset-btn" data-brand="telegram" title="Telegram"><i class="fa-brands fa-telegram"></i></button>
+                                    <button class="logo-preset-btn" data-brand="discord" title="Discord"><i class="fa-brands fa-discord"></i></button>
+                                    <button class="logo-preset-btn" data-brand="paypal" title="PayPal"><i class="fa-brands fa-paypal"></i></button>
+                                    <button class="logo-preset-btn" data-brand="google" title="Google"><i class="fa-brands fa-google"></i></button>
+                                    <button class="logo-preset-btn" data-brand="bitcoin" title="Bitcoin"><i class="fa-brands fa-bitcoin"></i></button>
+                                    <button class="logo-preset-btn" data-brand="wifi" title="WiFi"><i class="fa-solid fa-wifi"></i></button>
+                                    <button class="logo-preset-btn" data-brand="phone" title="Phone"><i class="fa-solid fa-phone"></i></button>
+                                    <button class="logo-preset-btn" data-brand="envelope" title="Email"><i class="fa-solid fa-envelope"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 5: FRAMES & TEXT LABELS -->
+                    <div class="panel__section collapsible-section">
+                        <div class="section-header">
+                            <h2 class="panel__title"><span class="step-num">5</span> Frames & Text Label</h2>
+                            <button class="collapse-btn" aria-label="Collapse Section"><i class="fa-solid fa-chevron-up"></i></button>
+                        </div>
+                        <div class="section-body">
+                            <div class="field">
+                                <label for="frameStyleSelect">Choose Frame Layout</label>
+                                <select id="frameStyleSelect">
+                                    <option value="none" selected>No Frame (Standard)</option>
+                                    <option value="bottom-banner">Classic Bottom Banner</option>
+                                    <option value="top-border">Top & Bottom borders</option>
+                                    <option value="balloon">Speech Bubble Frame</option>
+                                    <option value="phone">Mobile Screen Mock Frame</option>
+                                    <option value="card">Card Frame Wrapper</option>
+                                </select>
+                            </div>
+                            <div id="frameControlsContainer" class="frame-controls-box" hidden>
+                                <div class="field">
+                                    <label for="frameTextInput">Frame Caption Text</label>
+                                    <input type="text" id="frameTextInput" placeholder="SCAN ME" value="SCAN ME" />
+                                </div>
+                                <div class="two-col">
+                                    <div class="field">
+                                        <label for="frameFontFamily">Text Font</label>
+                                        <select id="frameFontFamily">
+                                            <option value="Outfit" selected>Outfit (Premium)</option>
+                                            <option value="Inter">Inter</option>
+                                            <option value="Space Grotesk">Space Grotesk</option>
+                                            <option value="system-ui">Sans Serif</option>
+                                            <option value="Georgia">Serif</option>
+                                            <option value="Courier New">Monospace</option>
+                                        </select>
+                                    </div>
+                                    <div class="field">
+                                        <label for="frameTextColor">Text Color</label>
+                                        <input type="color" id="frameTextColor" value="#ffffff" />
+                                    </div>
+                                </div>
+                                <div class="two-col">
+                                    <div class="field">
+                                        <label for="frameBgColor">Frame Fill Color</label>
+                                        <input type="color" id="frameBgColor" value="#0072ff" />
+                                    </div>
+                                    <div class="field">
+                                        <label for="frameFontSize">Font Size</label>
+                                        <input type="range" id="frameFontSize" min="10" max="32" value="16" />
+                                        <span class="range-value" id="frameFontSizeVal">16px</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Preview Right Control Panel -->
+                <section class="panel glass-panel qr-preview-section" aria-label="QR Code Output Preview">
+                    <div class="card-header">
+                        <div class="card-header__title"><i class="fa-solid fa-eye"></i> Studio Preview</div>
+                        
+                        <!-- Contrast Assessment Badge -->
+                        <div class="contrast-badge success" id="contrastBadge" title="Calculates color readability ratio">
+                            <i class="fa-solid fa-circle-check"></i> Scannable
+                        </div>
+                    </div>
+
+                    <!-- 3D Tilt Wrapper stage -->
+                    <div class="tilt-stage-wrapper">
+                        <div class="qr-preview-card" id="qrPreviewCard">
+                            <!-- Overlay scan line -->
+                            <div class="preview-scan-line" id="scanLine" aria-hidden="true"></div>
+                            
+                            <div class="qr-loading-spinner" id="qrLoadingSpinner" hidden>
+                                <div class="loader-ring"></div>
+                                <p>Re-rendering...</p>
+                            </div>
+                            
+                            <!-- Main QR code display -->
+                            <div class="preview-canvas-holder" id="studioQRHolder"></div>
+                        </div>
+                    </div>
+
+                    <div class="preview-meta-stats">
+                        <span id="qrMatrixSizeBadge">Version: Auto (21x21 modules)</span>
+                        <span id="qrRawCharacterCount">Payload: 0 characters</span>
+                    </div>
+
+                    <!-- DOWNLOAD OPTIONS PANEL -->
+                    <div class="panel__section">
+                        <h3 class="panel__title"><i class="fa-solid fa-cloud-arrow-down"></i> Export Downloads</h3>
+                        <div class="export-buttons-grid">
+                            <button class="btn primary" id="btnDownloadPNG"><i class="fa-solid fa-file-image"></i> PNG Image</button>
+                            <button class="btn primary" id="btnDownloadSVG"><i class="fa-solid fa-file-code"></i> SVG Vector</button>
+                            <button class="btn" id="btnDownloadPDF"><i class="fa-solid fa-file-pdf"></i> PDF Document</button>
+                            <button class="btn" id="btnDownloadJPG"><i class="fa-solid fa-image"></i> JPEG Standard</button>
+                            <button class="btn" id="btnDownloadWebP"><i class="fa-solid fa-pager"></i> WebP Web</button>
+                        </div>
+                    </div>
+
+                    <!-- SHARE AND OTHER QUICK UTILITIES -->
+                    <div class="panel__section">
+                        <h3 class="panel__title"><i class="fa-solid fa-share-nodes"></i> Quick Copy & Share</h3>
+                        <div class="quick-utilities-row">
+                            <button class="btn small ghost" id="btnCopyImage" title="Copy QR code png image to clipboard"><i class="fa-solid fa-copy"></i> Copy Image</button>
+                            <button class="btn small ghost" id="btnCopySVG" title="Copy Raw SVG text markup"><i class="fa-solid fa-code"></i> Copy SVG Markup</button>
+                            <button class="btn small ghost" id="btnPrintQR" title="Print physical layout"><i class="fa-solid fa-print"></i> Print</button>
+                            <button class="btn small ghost" id="btnShareQR" title="Share link"><i class="fa-solid fa-share-nodes"></i> Share</button>
+                            <button class="btn small error ghost" id="btnResetAllStudio"><i class="fa-solid fa-rotate-left"></i> Reset Defaults</button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </section>
+
+        <!-- Tab Content: PRESETS -->
+        <section id="presets-tab" class="tab-content">
+            <h2 class="section-heading"><i class="fa-solid fa-palette"></i> One-Click Branded Presets</h2>
+            <p class="section-tagline">Apply stunning, pre-designed color palettes and module shapes instantly.</p>
+            
+            <div class="presets-gallery-grid">
+                <!-- Preset Cards will be injected by customization.js -->
+            </div>
+        </section>
+
+        <!-- Tab Content: SCANNER (QR READER) -->
+        <section id="scanner-tab" class="tab-content">
+            <h2 class="section-heading"><i class="fa-solid fa-qrcode"></i> Scan & Decode QR Code</h2>
+            <p class="section-tagline">Scan QR codes instantly using your camera feed or upload an image file.</p>
+            
+            <div class="scanner-grid">
+                <!-- Left Scanning card -->
+                <div class="panel glass-panel scanner-viewcard">
+                    <div class="scanner-header-row">
+                        <select id="cameraDeviceSelector">
+                            <option value="">Detecting cameras...</option>
+                        </select>
+                        <button class="btn small primary" id="btnToggleCamera"><i class="fa-solid fa-camera-rotate"></i> Start Scanner</button>
+                        <button class="btn small ghost" id="btnToggleScannerTorch" hidden><i class="fa-solid fa-lightbulb"></i> Flashlight</button>
+                    </div>
+
+                    <div class="camera-stage-wrapper">
+                        <!-- Camera feed screen -->
+                        <div id="scannerVideoViewport" class="scanner-feed-viewport">
+                            <div class="scanner-overlay-laser" id="scannerLaser" hidden></div>
+                            <div class="scanner-viewport-placeholder" id="scannerPlaceholder">
+                                <i class="fa-solid fa-camera camera-placeholder-icon"></i>
+                                <p>Select camera and click "Start Scanner" to begin live scan.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Drag zone scanner alternative -->
+                    <div class="scanner-drag-zone" id="scannerDragZone">
+                        <i class="fa-solid fa-file-arrow-up cloud-icon"></i>
+                        <p>Drag & drop QR Code image here or <strong>browse files</strong> to decode</p>
+                        <input type="file" id="scannerUploadInput" accept="image/*" style="display:none;" />
+                    </div>
+                </div>
+
+                <!-- Right Scanner Results card -->
+                <div class="panel glass-panel scanner-results-panel">
+                    <h3 class="panel__title"><i class="fa-solid fa-square-poll-horizontal"></i> Decoded QR Result</h3>
+                    
+                    <div class="scanner-results-card" id="scannerResultContainer">
+                        <div class="scanner-empty-results" id="scannerResultEmpty">
+                            <i class="fa-solid fa-box-open empty-icon"></i>
+                            <p>No QR Code detected yet. Start camera scanning or upload an image.</p>
+                        </div>
+                        
+                        <div class="scanner-real-results" id="scannerResultReal" hidden>
+                            <div class="meta-row">
+                                <span class="badge" id="scannerResultType">Type: URL</span>
+                                <span class="timestamp" id="scannerResultTime">Today, 2:30 PM</span>
+                            </div>
+                            <div class="result-text-area">
+                                <pre id="scannerResultText"></pre>
+                            </div>
+                            
+                            <div class="scanner-actions-grid" id="scannerActionsPanel">
+                                <!-- Action buttons injected dynamically (e.g. open link, send mail) -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Scan History list -->
+                    <div class="scanner-history-section">
+                        <h4 class="panel__title"><i class="fa-solid fa-clock-rotate-left"></i> Scanned History Log</h4>
+                        <div class="history-list" id="scanHistoryLog">
+                            <!-- Injected by scanner.js -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab Content: BATCH GENERATOR -->
+        <section id="batch-tab" class="tab-content">
+            <h2 class="section-heading"><i class="fa-solid fa-layer-group"></i> Bulk QR Code Generator</h2>
+            <p class="section-tagline">Generate dozens of QR codes at once using a text list or uploading a CSV spreadsheet.</p>
+
+            <div class="batch-grid">
+                <div class="panel glass-panel batch-controls">
+                    <h3 class="panel__title"><i class="fa-solid fa-file-csv"></i> Import Batch Data</h3>
+                    
+                    <div class="field">
+                        <label for="batchInputArea">Enter Items (One URL or string per line)</label>
+                        <textarea id="batchInputArea" rows="8" placeholder="https://google.com&#10;https://facebook.com&#10;https://twitter.com"></textarea>
+                    </div>
+
+                    <div class="batch-upload-row">
+                        <label class="btn small ghost file-upload-btn">
+                            <i class="fa-solid fa-file-arrow-up"></i> Upload CSV Spreadsheet
+                            <input type="file" id="batchCsvUpload" accept=".csv" style="display:none;" />
+                        </label>
+                        <a href="#" class="csv-template-link" id="btnDownloadCsvTemplate"><i class="fa-solid fa-file-circle-question"></i> Download CSV Template</a>
+                    </div>
+
+                    <h3 class="panel__title" style="margin-top:20px;"><i class="fa-solid fa-sliders"></i> Base Styling Settings</h3>
+                    <div class="two-col">
+                        <div class="field">
+                            <label for="batchDotStyle">Body Dot Style</label>
+                            <select id="batchDotStyle">
+                                <option value="square" selected>Square Modules</option>
+                                <option value="rounded">Rounded Modules</option>
+                                <option value="dots">Circular Dots</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label for="batchFgColor">Foreground Color</label>
+                            <input type="color" id="batchFgColor" value="#05070d" />
+                        </div>
+                    </div>
+
+                    <div class="btn-row" style="margin-top:20px;">
+                        <button class="btn primary w-100" id="btnGenerateBatch"><i class="fa-solid fa-circle-play"></i> Generate Bulk QRs</button>
+                    </div>
+                </div>
+
+                <div class="panel glass-panel batch-results-panel">
+                    <div class="batch-results-header">
+                        <h3 class="panel__title"><i class="fa-solid fa-grip"></i> Bulk Output List (<span id="batchCountBadge">0</span> QRs)</h3>
+                        <button class="btn small primary" id="btnDownloadBatchZip" disabled><i class="fa-solid fa-file-zipper"></i> Download All as ZIP</button>
+                    </div>
+
+                    <div class="batch-preview-grid-wrapper">
+                        <div class="batch-progress-bar-container" id="batchProgressBarBox" hidden>
+                            <div class="progress-bar-track">
+                                <div class="progress-bar-fill" id="batchProgressBarFill"></div>
+                            </div>
+                            <span id="batchProgressBarText">Generating 0%...</span>
+                        </div>
+
+                        <div class="batch-preview-cards-grid" id="batchPreviewGrid">
+                            <div class="empty-batch-box">
+                                <i class="fa-solid fa-cubes empty-icon"></i>
+                                <p>No batch items entered yet. Insert text list above and click "Generate".</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab Content: DYNAMIC QR ANALYTICS -->
+        <section id="analytics-tab" class="tab-content">
+            <h2 class="section-heading"><i class="fa-solid fa-chart-line"></i> Dynamic QR Tracking Simulator</h2>
+            <p class="section-tagline">Learn how Dynamic QR codes let you track scanning metrics and modify URL destinations instantly.</p>
+
+            <div class="analytics-grid">
+                <!-- Left control board -->
+                <div class="panel glass-panel dynamic-card">
+                    <h3 class="panel__title"><i class="fa-solid fa-shuffle"></i> Short Redirect Manager</h3>
+                    <p class="hint">The printed QR code points to your static short URL. You can redirect it anywhere below.</p>
+                    
+                    <div class="field font-mono">
+                        <label>Printed Short URL (Static QR payload)</label>
+                        <input type="text" id="dynamicShortUrlInput" value="https://qrm.to/sim_studio_123" readonly />
+                    </div>
+
+                    <div class="field">
+                        <label for="dynamicDestInput">Dynamic Target Destination URL</label>
+                        <input type="url" id="dynamicDestInput" value="https://original-link.com/offers" />
+                        <span class="hint">Modifying this does NOT alter the QR code image. Dynamic QRs route users via proxy.</span>
+                    </div>
+
+                    <div class="btn-row">
+                        <button class="btn primary" id="btnSaveDynamicTarget"><i class="fa-solid fa-circle-check"></i> Update Destination URL</button>
+                        <button class="btn ghost" id="btnSimulateScan"><i class="fa-solid fa-mobile-screen-button"></i> Simulate Scanning QR</button>
+                    </div>
+
+                    <div class="mini-live-qr-holder">
+                        <h4>Static Short URL QR Code</h4>
+                        <div id="dynamicQrImageHolder" class="center-flex-box"></div>
+                    </div>
+                </div>
+
+                <!-- Right statistics dashboard -->
+                <div class="panel glass-panel dynamic-dashboard">
+                    <div class="stats-header-bar">
+                        <h3 class="panel__title"><i class="fa-solid fa-chart-pie"></i> Dynamic QR Scanner Metrics</h3>
+                        <button class="btn small ghost" id="btnResetAnalyticsStats"><i class="fa-solid fa-clock-rotate-left"></i> Reset Stats</button>
+                    </div>
+
+                    <!-- Statistics counts -->
+                    <div class="stats-cards-grid">
+                        <div class="stat-card">
+                            <span class="stat-num" id="statTotalScans">0</span>
+                            <span class="stat-label">Total Scans</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-num" id="statUniqueUsers">0</span>
+                            <span class="stat-label">Unique Scanners</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-num" id="statLastScanned">N/A</span>
+                            <span class="stat-label">Last Scanned</span>
+                        </div>
+                    </div>
+
+                    <!-- Graphical Charts -->
+                    <div class="charts-section-grid">
+                        <div class="chart-container-box">
+                            <canvas id="scansTimelineChart"></canvas>
+                        </div>
+                        <div class="chart-container-box">
+                            <canvas id="scansDeviceChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab Content: TOOLS & PRINT CALCULATOR -->
+        <section id="tools-tab" class="tab-content">
+            <h2 class="section-heading"><i class="fa-solid fa-toolbox"></i> Advanced Tools & Suite Settings</h2>
+            <p class="section-tagline">Calculate physical QR print sizes, import/export branding presets, or manage app configuration.</p>
+
+            <div class="tools-grid">
+                <!-- Print Size Calculator -->
+                <div class="panel glass-panel tool-card">
+                    <h3 class="panel__title"><i class="fa-solid fa-calculator"></i> Print Physical Size Calculator</h3>
+                    <p class="hint">Calculates the recommended physical dimensions of the printed QR code based on scanning distance.</p>
+
+                    <div class="field">
+                        <label for="calcDistanceInput">Average Scanning Distance (meters)</label>
+                        <input type="number" id="calcDistanceInput" value="1.5" min="0.1" max="100" step="0.1" />
+                    </div>
+
+                    <div class="field">
+                        <label for="calcSurfaceAngle">Expected Reading Angle</label>
+                        <select id="calcSurfaceAngle">
+                            <option value="direct" selected>Direct View (Perpendicular - Best)</option>
+                            <option value="skewed">Skewed/Angled Surface (Harder)</option>
+                        </select>
+                    </div>
+
+                    <div class="calculator-results-box" id="calcResultsDisplay">
+                        <p>Recommended printed size: <strong id="calcOutputCm">15.0 cm</strong> × <strong id="calcOutputCm2">15.0 cm</strong></p>
+                        <span class="ratio-hint">Standard sizing ratio is 1:10 of the reading distance. Skewed views add +50% thickness buffer.</span>
+                    </div>
+                </div>
+
+                <!-- Export/Import Settings Profile -->
+                <div class="panel glass-panel tool-card">
+                    <h3 class="panel__title"><i class="fa-solid fa-file-export"></i> Save & Load Design Profiles</h3>
+                    <p class="hint">Export your current studio styles (colors, patterns, gradients, frames) to a JSON file to backup or share your brand profile.</p>
+
+                    <div class="btn-grid" style="display:flex; flex-direction:column; gap:12px; margin-top:20px;">
+                        <button class="btn primary" id="btnExportDesignSettings"><i class="fa-solid fa-download"></i> Save Settings Profile (.json)</button>
+                        <label class="btn ghost file-upload-btn text-center">
+                            <i class="fa-solid fa-upload"></i> Load Settings Profile (.json)
+                            <input type="file" id="btnImportDesignSettings" accept=".json" style="display:none;" />
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Studio History list -->
+                <div class="panel glass-panel tool-card history-full-panel">
+                    <h3 class="panel__title"><i class="fa-solid fa-history"></i> Saved History Manager</h3>
+                    <p class="hint">Review your locally saved generated codes. We store the last 20 generated QRs.</p>
+                    
+                    <div class="history-controls-row">
+                        <button class="btn small error ghost" id="btnClearHistoryBtn"><i class="fa-solid fa-trash-can"></i> Clear All History</button>
+                        <button class="btn small ghost" id="btnExportHistoryCsv"><i class="fa-solid fa-file-csv"></i> Export History CSV</button>
+                    </div>
+
+                    <div class="history-list-scrollable" id="studioHistoryScroll">
+                        <!-- Injected dynamically by app.js -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab Content: API DOCS & HELP CENTER -->
+        <section id="help-tab" class="tab-content">
+            <h2 class="section-heading"><i class="fa-solid fa-circle-question"></i> Help Center & Developer API</h2>
+            <p class="section-tagline">Answers to common questions and developer integration code snippets.</p>
+
+            <div class="help-grid">
+                <!-- FAQs accordion -->
+                <div class="panel glass-panel help-faq-card">
+                    <h3 class="panel__title"><i class="fa-solid fa-circle-nodes"></i> Frequently Asked Questions</h3>
+                    
+                    <div class="faq-container">
+                        <details class="faq-item">
+                            <summary class="faq-question">What is Error Correction Level (ECC)?</summary>
+                            <div class="faq-answer">
+                                <p>Error correction enables QR readers to scan the code even if parts of it are damaged, dirty, or covered.
+                                   <ul>
+                                       <li><strong>Level L (7%):</strong> Best for simple, fast scanning without logos.</li>
+                                       <li><strong>Level M (15%):</strong> The default balanced level.</li>
+                                       <li><strong>Level Q (25%):</strong> Solid level for logos.</li>
+                                       <li><strong>Level H (30%):</strong> Recommended when adding logos, overlays, or when printed in harsh conditions.</li>
+                                   </ul>
+                                </p>
+                            </div>
+                        </details>
+                        
+                        <details class="faq-item">
+                            <summary class="faq-question">Why is SVG download better than PNG?</summary>
+                            <div class="faq-answer">
+                                <p>SVG (Scalable Vector Graphics) is a vector format. This means it can be scaled infinitely to any print resolution without pixelating or blurring. Ideal for physical poster designs, banners, and flyers. PNG is a raster image format, which is better for web shares and app usage.</p>
+                            </div>
+                        </details>
+
+                        <details class="faq-item">
+                            <summary class="faq-question">How does contrast checking work?</summary>
+                            <div class="faq-answer">
+                                <p>QR code scanners rely on the contrast differences between the dark modules (foreground) and light modules (background). If you choose a foreground color that is too light or a background that is too dark, readers won't register the code. Our contrast badge monitors color values and alerts you if contrast falls below scannable levels.</p>
+                            </div>
+                        </details>
+
+                        <details class="faq-item">
+                            <summary class="faq-question">Is Chandra truly free?</summary>
+                            <div class="faq-answer">
+                                <p>Yes! Chandra is 100% free with unlimited generation, scanning, and high-quality vector downloads. There are no registration restrictions, dynamic link expiration, or watermarks.</p>
+                            </div>
+                        </details>
+                    </div>
+                </div>
+
+                <!-- API Snippet generator -->
+                <div class="panel glass-panel help-api-card">
+                    <h3 class="panel__title"><i class="fa-solid fa-code"></i> Developer QR Generator API</h3>
+                    <p class="hint">Use our mock API documentation snippet generator to dynamically embed QR generation in your applications.</p>
+
+                    <div class="api-controls-row">
+                        <button class="btn small active" id="btnApiLangCurl">cURL</button>
+                        <button class="btn small" id="btnApiLangJs">JavaScript</button>
+                        <button class="btn small" id="btnApiLangPython">Python</button>
+                        <button class="btn small" id="btnApiLangGo">Go</button>
+                    </div>
+
+                    <div class="code-box">
+                        <pre><code id="apiCodeBlock"># Generating a QR using cURL...</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal: Keyboard Shortcuts -->
+    <div class="modal-backdrop" id="shortcutsModal" hidden>
+        <div class="modal-box glass-panel">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-keyboard"></i> Keyboard Shortcuts</h3>
+                <button class="close-modal-btn" id="closeShortcutsModalBtn" aria-label="Close modal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="shortcuts-table">
+                        <thead>
+                            <tr>
+                                <th>Action</th>
+                                <th>Shortcut</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Switch to Studio</td>
+                                <td><kbd>Alt</kbd> + <kbd>S</kbd></td>
+                            </tr>
+                            <tr>
+                                <td>Switch to Presets</td>
+                                <td><kbd>Alt</kbd> + <kbd>P</kbd></td>
+                            </tr>
+                            <tr>
+                                <td>Switch to Camera Scanner</td>
+                                <td><kbd>Alt</kbd> + <kbd>C</kbd></td>
+                            </tr>
+                            <tr>
+                                <td>Switch to Bulk Creator</td>
+                                <td><kbd>Alt</kbd> + <kbd>B</kbd></td>
+                            </tr>
+                            <tr>
+                                <td>Toggle Sound Feedback</td>
+                                <td><kbd>Alt</kbd> + <kbd>K</kbd></td>
+                            </tr>
+                            <tr>
+                                <td>Toggle Light/Dark Theme</td>
+                                <td><kbd>Alt</kbd> + <kbd>T</kbd></td>
+                            </tr>
+                            <tr>
+                                <td>Download QR as PNG</td>
+                                <td><kbd>Alt</kbd> + <kbd>D</kbd></td>
+                            </tr>
+                            <tr>
+                                <td>Reset All Controls</td>
+                                <td><kbd>Alt</kbd> + <kbd>R</kbd></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert toast notification wrapper -->
+    <div id="toastContainer" class="toast-wrapper" aria-live="polite"></div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div>Chandra — Premium QR Code Generator Studio</div>
+        <div class="footer__links">
+            <span><i class="fa-regular fa-circle-check"></i> Vector SVG Exports</span>
+            <span><i class="fa-regular fa-circle-check"></i> High ECC Protection</span>
+            <span><i class="fa-regular fa-circle-check"></i> Offline Scanning</span>
+        </div>
+    </footer>
+
+    <!-- App Scripts -->
+    <script src="js/app.js"></script>
+    <script src="js/qr-generator.js"></script>
+    <script src="js/customization.js"></script>
+    <script src="js/download.js"></script>
+    <script src="js/scanner.js"></script>
+    <script src="js/batch.js"></script>
+</body>
+
+</html>
