@@ -394,6 +394,131 @@
                 <label for="f_mp_query">Search Address or Coordinates</label>
                 <input type="text" id="f_mp_query" placeholder="Times Square, NYC or 40.758,-73.985" value="Times Square, NYC" />
             </div>
+        `,
+        upi: () => `
+            <div class="field">
+                <label for="f_upi_id">UPI ID / VPA</label>
+                <input type="text" id="f_upi_id" placeholder="yourname@upi" value="merchant@upi" />
+                <span class="hint">e.g. name@okaxis, name@paytm, 9876543210@ybl</span>
+            </div>
+            <div class="field">
+                <label for="f_upi_name">Payee Name</label>
+                <input type="text" id="f_upi_name" placeholder="Merchant Name" value="My Store" />
+            </div>
+            <div class="two-col">
+                <div class="field">
+                    <label for="f_upi_amount">Amount (₹)</label>
+                    <input type="number" id="f_upi_amount" placeholder="0.00" step="0.01" value="" />
+                </div>
+                <div class="field">
+                    <label for="f_upi_note">Note / Description</label>
+                    <input type="text" id="f_upi_note" placeholder="Payment note" value="" />
+                </div>
+            </div>
+        `,
+        phonepe: () => `
+            <div class="field">
+                <label for="f_ppe_upiid">PhonePe UPI ID / VPA</label>
+                <input type="text" id="f_ppe_upiid" placeholder="yourname@ybl" value="merchant@ybl" />
+                <span class="hint">PhonePe VPAs typically end in @ybl or @ibl</span>
+            </div>
+            <div class="field">
+                <label for="f_ppe_name">Payee Name</label>
+                <input type="text" id="f_ppe_name" placeholder="Business Name" value="My Business" />
+            </div>
+            <div class="two-col">
+                <div class="field">
+                    <label for="f_ppe_amount">Amount (₹)</label>
+                    <input type="number" id="f_ppe_amount" placeholder="0.00" step="0.01" value="" />
+                </div>
+                <div class="field">
+                    <label for="f_ppe_note">Transaction Note</label>
+                    <input type="text" id="f_ppe_note" placeholder="e.g. Order #1001" value="" />
+                </div>
+            </div>
+        `,
+        googlepay: () => `
+            <div class="field">
+                <label for="f_gpy_upiid">Google Pay UPI ID / VPA</label>
+                <input type="text" id="f_gpy_upiid" placeholder="yourname@okicici" value="merchant@okicici" />
+                <span class="hint">GPay VPAs often end in @okicici, @oksbi, @okaxis</span>
+            </div>
+            <div class="field">
+                <label for="f_gpy_name">Payee Name</label>
+                <input type="text" id="f_gpy_name" placeholder="Merchant Name" value="My Shop" />
+            </div>
+            <div class="two-col">
+                <div class="field">
+                    <label for="f_gpy_amount">Amount (₹)</label>
+                    <input type="number" id="f_gpy_amount" placeholder="0.00" step="0.01" value="" />
+                </div>
+                <div class="field">
+                    <label for="f_gpy_note">Payment Note</label>
+                    <input type="text" id="f_gpy_note" placeholder="e.g. Invoice 202" value="" />
+                </div>
+            </div>
+        `,
+        paytm: () => `
+            <div class="field">
+                <label for="f_ptm_mobile">Paytm Registered Mobile / UPI ID</label>
+                <input type="text" id="f_ptm_mobile" placeholder="9876543210 or name@paytm" value="9876543210@paytm" />
+            </div>
+            <div class="field">
+                <label for="f_ptm_name">Payee Name</label>
+                <input type="text" id="f_ptm_name" placeholder="Merchant / Person Name" value="My Shop" />
+            </div>
+            <div class="two-col">
+                <div class="field">
+                    <label for="f_ptm_amount">Amount (₹)</label>
+                    <input type="number" id="f_ptm_amount" placeholder="0.00" step="0.01" value="" />
+                </div>
+                <div class="field">
+                    <label for="f_ptm_note">Note</label>
+                    <input type="text" id="f_ptm_note" placeholder="Payment purpose" value="" />
+                </div>
+            </div>
+        `,
+        bhim: () => `
+            <div class="field">
+                <label for="f_bhm_upiid">BHIM UPI ID / VPA</label>
+                <input type="text" id="f_bhm_upiid" placeholder="yourname@upi" value="user@upi" />
+                <span class="hint">Works with all BHIM-UPI supported bank apps</span>
+            </div>
+            <div class="field">
+                <label for="f_bhm_name">Payee Name</label>
+                <input type="text" id="f_bhm_name" placeholder="Merchant Name" value="Merchant" />
+            </div>
+            <div class="two-col">
+                <div class="field">
+                    <label for="f_bhm_amount">Amount (₹)</label>
+                    <input type="number" id="f_bhm_amount" placeholder="0.00" step="0.01" value="" />
+                </div>
+                <div class="field">
+                    <label for="f_bhm_note">Remark</label>
+                    <input type="text" id="f_bhm_note" placeholder="Payment remark" value="" />
+                </div>
+            </div>
+        `,
+        amazonpay: () => `
+            <div class="field">
+                <label for="f_apay_upiid">Amazon Pay UPI ID</label>
+                <input type="text" id="f_apay_upiid" placeholder="yourname@apl" value="merchant@apl" />
+                <span class="hint">Amazon Pay VPAs typically end in @apl</span>
+            </div>
+            <div class="field">
+                <label for="f_apay_name">Payee Name</label>
+                <input type="text" id="f_apay_name" placeholder="Merchant Name" value="My Store" />
+            </div>
+            <div class="two-col">
+                <div class="field">
+                    <label for="f_apay_amount">Amount (₹)</label>
+                    <input type="number" id="f_apay_amount" placeholder="0.00" step="0.01" value="" />
+                </div>
+                <div class="field">
+                    <label for="f_apay_note">Payment Note</label>
+                    <input type="text" id="f_apay_note" placeholder="e.g. Order payment" value="" />
+                </div>
+            </div>
         `
     };
 
@@ -491,6 +616,66 @@
                 return getVal("#f_sp_url");
             case "maps":
                 return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(getVal("#f_mp_query"))}`;
+            case "upi": {
+                const uid = getVal("#f_upi_id");
+                const uname = encodeURIComponent(getVal("#f_upi_name"));
+                const uamt = getVal("#f_upi_amount");
+                const unote = encodeURIComponent(getVal("#f_upi_note"));
+                let upiUrl = `upi://pay?pa=${uid}&pn=${uname}&cu=INR`;
+                if (uamt) upiUrl += `&am=${uamt}`;
+                if (unote) upiUrl += `&tn=${unote}`;
+                return upiUrl;
+            }
+            case "phonepe": {
+                const ppid = getVal("#f_ppe_upiid");
+                const ppname = encodeURIComponent(getVal("#f_ppe_name"));
+                const ppamt = getVal("#f_ppe_amount");
+                const ppnote = encodeURIComponent(getVal("#f_ppe_note"));
+                let ppUrl = `upi://pay?pa=${ppid}&pn=${ppname}&cu=INR`;
+                if (ppamt) ppUrl += `&am=${ppamt}`;
+                if (ppnote) ppUrl += `&tn=${ppnote}`;
+                return ppUrl;
+            }
+            case "googlepay": {
+                const gpid = getVal("#f_gpy_upiid");
+                const gpname = encodeURIComponent(getVal("#f_gpy_name"));
+                const gpamt = getVal("#f_gpy_amount");
+                const gpnote = encodeURIComponent(getVal("#f_gpy_note"));
+                let gpUrl = `upi://pay?pa=${gpid}&pn=${gpname}&cu=INR`;
+                if (gpamt) gpUrl += `&am=${gpamt}`;
+                if (gpnote) gpUrl += `&tn=${gpnote}`;
+                return gpUrl;
+            }
+            case "paytm": {
+                const ptid = getVal("#f_ptm_mobile");
+                const ptname = encodeURIComponent(getVal("#f_ptm_name"));
+                const ptamt = getVal("#f_ptm_amount");
+                const ptnote = encodeURIComponent(getVal("#f_ptm_note"));
+                let ptUrl = `upi://pay?pa=${ptid}&pn=${ptname}&cu=INR`;
+                if (ptamt) ptUrl += `&am=${ptamt}`;
+                if (ptnote) ptUrl += `&tn=${ptnote}`;
+                return ptUrl;
+            }
+            case "bhim": {
+                const bhid = getVal("#f_bhm_upiid");
+                const bhname = encodeURIComponent(getVal("#f_bhm_name"));
+                const bhamt = getVal("#f_bhm_amount");
+                const bhnote = encodeURIComponent(getVal("#f_bhm_note"));
+                let bhUrl = `upi://pay?pa=${bhid}&pn=${bhname}&cu=INR`;
+                if (bhamt) bhUrl += `&am=${bhamt}`;
+                if (bhnote) bhUrl += `&tn=${bhnote}`;
+                return bhUrl;
+            }
+            case "amazonpay": {
+                const apid = getVal("#f_apay_upiid");
+                const apname = encodeURIComponent(getVal("#f_apay_name"));
+                const apamt = getVal("#f_apay_amount");
+                const apnote = encodeURIComponent(getVal("#f_apay_note"));
+                let apUrl = `upi://pay?pa=${apid}&pn=${apname}&cu=INR`;
+                if (apamt) apUrl += `&am=${apamt}`;
+                if (apnote) apUrl += `&tn=${apnote}`;
+                return apUrl;
+            }
             default:
                 return "https://chandra.studio";
         }
@@ -602,6 +787,37 @@
                         setVal("#f_so_brand", "telegram");
                         setVal("#f_so_username", payload.split("t.me/")[1] || "");
                     }
+                    break;
+                }
+                case "upi":
+                case "phonepe":
+                case "googlepay":
+                case "paytm":
+                case "bhim":
+                case "amazonpay": {
+                    // Parse UPI URI: upi://pay?pa=ID&pn=NAME&am=AMT&tn=NOTE&cu=INR
+                    const paMatch = payload.match(/[?&]pa=([^&]*)/);
+                    const pnMatch = payload.match(/[?&]pn=([^&]*)/);
+                    const amMatch = payload.match(/[?&]am=([^&]*)/);
+                    const tnMatch = payload.match(/[?&]tn=([^&]*)/);
+                    const paVal = paMatch ? decodeURIComponent(paMatch[1]) : "";
+                    const pnVal = pnMatch ? decodeURIComponent(pnMatch[1]) : "";
+                    const amVal = amMatch ? decodeURIComponent(amMatch[1]) : "";
+                    const tnVal = tnMatch ? decodeURIComponent(tnMatch[1]) : "";
+                    const prefixMap = {
+                        upi: "#f_upi",
+                        phonepe: "#f_ppe",
+                        googlepay: "#f_gpy",
+                        paytm: "#f_ptm",
+                        bhim: "#f_bhm",
+                        amazonpay: "#f_apay"
+                    };
+                    const idField = type === "paytm" ? "_mobile" : "_upiid";
+                    const p = prefixMap[type];
+                    setVal(`${p}${idField}`, paVal);
+                    setVal(`${p}_name`, pnVal);
+                    setVal(`${p}_amount`, amVal);
+                    setVal(`${p}_note`, tnVal);
                     break;
                 }
             }
