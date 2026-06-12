@@ -522,26 +522,6 @@
 
     // Initial binding
     document.addEventListener("DOMContentLoaded", () => {
-        // Set default logo on startup if no configuration is saved
-        if (window.Chandra.state.logoDataUrl === undefined) {
-            window.Chandra.state.logoDataUrl = "logo.png";
-            const logoPreview = document.getElementById("logoPreviewImg");
-            if (logoPreview) logoPreview.src = "logo.png";
-            const logoCtrl = document.getElementById("logoControlPanel");
-            if (logoCtrl) logoCtrl.hidden = false;
-            // set defaults for sliders
-            const sizeSlider = document.getElementById("logoSizeSlider");
-            if (sizeSlider) sizeSlider.value = 22;
-            const sizeVal = document.getElementById("logoSizeVal");
-            if (sizeVal) sizeVal.textContent = "22%";
-            const marginSlider = document.getElementById("logoMarginSlider");
-            if (marginSlider) marginSlider.value = 6;
-            const radiusSlider = document.getElementById("logoRadiusSlider");
-            if (radiusSlider) radiusSlider.value = 8;
-            const eraserCheckbox = document.getElementById("logoBackgroundEraser");
-            if (eraserCheckbox) eraserCheckbox.checked = true;
-        }
-
         bindStudioUIListeners();
         updateColorsInputsVisibility();
         // Wait a slight tick for content payload templates to bind
